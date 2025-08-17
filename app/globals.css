@@ -1,0 +1,590 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS personnalisées */
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #a855f7;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --gray-50: #f9fafb;
+  --gray-900: #111827;
+  --sidebar-width: 288px;
+  /* 72 * 4 = 288px (w-72) */
+  --chat-width: 384px;
+  /* 96 * 4 = 384px (w-96) */
+}
+
+/* Styles de base */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--gray-900);
+  background-color: var(--gray-50);
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* Animations personnalisées */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Classes utilitaires */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 2s linear infinite;
+}
+
+.animate-bounce-subtle {
+  animation: bounce 2s infinite;
+}
+
+/* Layout principal */
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.sidebar-layout {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 30;
+}
+
+.content-layout {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  transition: margin-right 0.3s ease;
+}
+
+.content-layout.with-chat {
+  margin-right: var(--chat-width);
+}
+
+.chat-layout {
+  width: var(--chat-width);
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 40;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.chat-layout.open {
+  transform: translateX(0);
+}
+
+/* Styles pour les cards */
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  @apply shadow-lg transform -translate-y-1;
+}
+
+.card-interactive {
+  @apply cursor-pointer;
+}
+
+.card-interactive:hover {
+  @apply shadow-xl transform -translate-y-2;
+}
+
+/* Styles pour les boutons */
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-blue-500 to-purple-600 text-white;
+  @apply hover:from-blue-600 hover:to-purple-700 focus:ring-blue-500;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 text-gray-700 border border-gray-300;
+  @apply hover:bg-gray-200 focus:ring-gray-500;
+}
+
+.btn-success {
+  @apply bg-green-500 text-white;
+  @apply hover:bg-green-600 focus:ring-green-500;
+}
+
+.btn-warning {
+  @apply bg-yellow-500 text-white;
+  @apply hover:bg-yellow-600 focus:ring-yellow-500;
+}
+
+.btn-danger {
+  @apply bg-red-500 text-white;
+  @apply hover:bg-red-600 focus:ring-red-500;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-sm;
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-lg;
+}
+
+/* Styles pour les inputs */
+.input-field {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg;
+  @apply focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  @apply transition-colors duration-200 bg-white;
+}
+
+.input-field:focus {
+  @apply outline-none;
+}
+
+.input-field:disabled {
+  @apply bg-gray-100 text-gray-500 cursor-not-allowed;
+}
+
+.input-error {
+  @apply border-red-300 focus:ring-red-500 focus:border-red-500;
+}
+
+.input-success {
+  @apply border-green-300 focus:ring-green-500 focus:border-green-500;
+}
+
+/* Styles pour les labels */
+.label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.label-required::after {
+  content: " *";
+  @apply text-red-500;
+}
+
+/* Styles pour les badges */
+.badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-800 border border-green-200;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+}
+
+.badge-error {
+  @apply bg-red-100 text-red-800 border border-red-200;
+}
+
+.badge-info {
+  @apply bg-blue-100 text-blue-800 border border-blue-200;
+}
+
+.badge-neutral {
+  @apply bg-gray-100 text-gray-800 border border-gray-200;
+}
+
+/* Services colors */
+.service-developpement {
+  @apply bg-emerald-50 text-emerald-700 border-emerald-200;
+}
+
+.service-infrastructure {
+  @apply bg-blue-50 text-blue-700 border-blue-200;
+}
+
+.service-design {
+  @apply bg-purple-50 text-purple-700 border-purple-200;
+}
+
+.service-marketing {
+  @apply bg-orange-50 text-orange-700 border-orange-200;
+}
+
+.service-commercial {
+  @apply bg-indigo-50 text-indigo-700 border-indigo-200;
+}
+
+.service-rh {
+  @apply bg-pink-50 text-pink-700 border-pink-200;
+}
+
+/* Styles pour les notifications/toasts */
+.toast {
+  @apply fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm;
+  @apply animate-fade-in;
+}
+
+.toast-success {
+  @apply bg-green-500 text-white;
+}
+
+.toast-error {
+  @apply bg-red-500 text-white;
+}
+
+.toast-warning {
+  @apply bg-yellow-500 text-white;
+}
+
+.toast-info {
+  @apply bg-blue-500 text-white;
+}
+
+/* Styles pour le loading */
+.loading-spinner {
+  @apply animate-spin rounded-full border-2 border-gray-300;
+  border-top-color: var(--primary-color);
+}
+
+.skeleton {
+  @apply bg-gray-200 animate-pulse rounded;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Styles pour les messages de chat */
+.chat-message {
+  @apply max-w-xs px-4 py-3 rounded-xl;
+}
+
+.chat-message-user {
+  @apply bg-gradient-to-r from-blue-500 to-purple-600 text-white ml-auto;
+}
+
+.chat-message-other {
+  @apply bg-gray-100 text-gray-900;
+}
+
+.chat-message-system {
+  @apply bg-purple-100 text-purple-900 text-center;
+}
+
+.chat-message-ai {
+  @apply bg-gradient-to-r from-purple-100 to-blue-100 text-purple-900;
+}
+
+/* Responsive design helpers */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
+
+  .mobile-full-width {
+    width: 100% !important;
+  }
+
+  .sidebar-layout {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-layout.mobile-open {
+    transform: translateX(0);
+  }
+
+  .content-layout {
+    margin-left: 0;
+  }
+
+  .content-layout.with-chat {
+    margin-right: 0;
+  }
+
+  .chat-layout {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    @apply p-4;
+  }
+
+  .btn {
+    @apply text-sm px-3 py-2;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break {
+    page-break-after: always;
+  }
+
+  .sidebar-layout,
+  .chat-layout {
+    display: none !important;
+  }
+
+  .content-layout {
+    margin: 0 !important;
+  }
+}
+
+/* Styles pour l'accessibilité */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus visible pour la navigation au clavier */
+.focus-visible:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Styles pour les modales */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4;
+}
+
+.modal-content {
+  @apply bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+  @apply p-6 border-b border-gray-200 flex-shrink-0;
+}
+
+.modal-body {
+  @apply flex-1 overflow-y-auto;
+}
+
+.modal-footer {
+  @apply p-6 border-t border-gray-200 flex-shrink-0;
+}
+
+/* Styles pour les dropdowns */
+.dropdown {
+  @apply relative inline-block;
+}
+
+.dropdown-content {
+  @apply absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50;
+  @apply opacity-0 scale-95 transform transition-all duration-200;
+}
+
+.dropdown.open .dropdown-content {
+  @apply opacity-100 scale-100;
+}
+
+.dropdown-item {
+  @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors;
+}
+
+/* Styles pour les tooltips */
+.tooltip {
+  @apply relative;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  @apply absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2;
+  @apply bg-gray-900 text-white text-xs rounded px-2 py-1;
+  @apply opacity-0 pointer-events-none transition-opacity duration-200;
+  white-space: nowrap;
+}
+
+.tooltip:hover::after {
+  @apply opacity-100;
+}
+
+/* Styles pour les progress bars */
+.progress-bar {
+  @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+.progress-fill {
+  @apply h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-300;
+}
+
+/* Styles pour les tabs */
+.tab-list {
+  @apply flex border-b border-gray-200;
+}
+
+.tab-button {
+  @apply px-4 py-2 font-medium text-sm text-gray-500 border-b-2 border-transparent;
+  @apply hover:text-gray-700 hover:border-gray-300 transition-colors duration-200;
+}
+
+.tab-button.active {
+  @apply text-blue-600 border-blue-500;
+}
+
+.tab-panel {
+  @apply py-4;
+}
+
+/* Styles pour les alertes */
+.alert {
+  @apply p-4 rounded-lg border;
+}
+
+.alert-success {
+  @apply bg-green-50 text-green-800 border-green-200;
+}
+
+.alert-warning {
+  @apply bg-yellow-50 text-yellow-800 border-yellow-200;
+}
+
+.alert-error {
+  @apply bg-red-50 text-red-800 border-red-200;
+}
+
+.alert-info {
+  @apply bg-blue-50 text-blue-800 border-blue-200;
+}
