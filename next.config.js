@@ -15,6 +15,7 @@ const nextConfig = {
     MONGODB_URI: process.env.MONGODB_URI,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    JWT_SECRET: process.env.JWT_SECRET,
   },
 
   // Configuration pour App Router
@@ -47,7 +48,13 @@ const nextConfig = {
       {
         source: '/api/:path*',
         headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value:
+              process.env.NODE_ENV === 'production'
+                ? process.env.ALLOWED_ORIGINS || 'https://votre-domaine.com'
+                : '*',
+          },
           {
             key: 'Access-Control-Allow-Methods',
             value: 'GET, POST, PUT, DELETE, OPTIONS',
@@ -55,6 +62,18 @@ const nextConfig = {
           {
             key: 'Access-Control-Allow-Headers',
             value: 'Content-Type, Authorization',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
           },
         ],
       },

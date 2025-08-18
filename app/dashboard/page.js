@@ -22,11 +22,19 @@ export default function DashboardPage() {
   const [aiResults, setAiResults] = useState(null)
   const [isAiLoading, setIsAiLoading] = useState(false)
 
+  // 🔥 AJOUT : État pour le timestamp (solution anti-hydratation)
+  const [lastUpdated, setLastUpdated] = useState('')
+  const [isMounted, setIsMounted] = useState(false)
+
   const { employees, stats, fetchEmployees } = useEmployeeStore()
 
   useEffect(() => {
     fetchEmployees()
     loadAnalytics()
+
+    // 🔥 AJOUT : Définir le timestamp côté client uniquement
+    setIsMounted(true)
+    setLastUpdated(new Date().toLocaleString())
   }, [fetchEmployees])
 
   const handleAISearch = async (query) => {
@@ -173,7 +181,7 @@ export default function DashboardPage() {
       <Sidebar />
 
       <main className="flex-1 flex flex-col overflow-hidden ml-72">
-        {/* Header */}
+        {/* Header - SEULE MODIFICATION ICI */}
         <header className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -184,7 +192,10 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-500">
-                Dernière mise à jour: {new Date().toLocaleString()}
+                {/* 🔥 CORRECTION : Affichage conditionnel du timestamp */}
+                {isMounted
+                  ? `Dernière mise à jour: ${lastUpdated}`
+                  : 'Chargement...'}
               </div>
             </div>
           </div>
@@ -192,7 +203,7 @@ export default function DashboardPage() {
 
         <div className="flex-1 overflow-auto p-6">
           <div className="max-w-7xl mx-auto space-y-6">
-            {/* Cartes de statistiques */}
+            {/* Cartes de statistiques - AUCUNE MODIFICATION */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-white rounded-xl shadow-md p-6">
                 <div className="flex items-center justify-between">
@@ -282,7 +293,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Section Demandes IA */}
+            {/* Section Demandes IA - AUCUNE MODIFICATION */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               {/* Header avec style ChatGPT */}
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
@@ -367,7 +378,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Demandes récentes */}
+              {/* Demandes récentes - AUCUNE MODIFICATION */}
               <div className="bg-white rounded-xl shadow-md p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold text-gray-900">
@@ -408,7 +419,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Répartition par catégorie */}
+              {/* Répartition par catégorie - AUCUNE MODIFICATION */}
               <div className="bg-white rounded-xl shadow-md p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold text-gray-900">
@@ -463,7 +474,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Top performers */}
+            {/* Top performers - AUCUNE MODIFICATION */}
             <div className="bg-white rounded-xl shadow-md p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">

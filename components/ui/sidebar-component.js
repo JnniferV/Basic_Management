@@ -3,53 +3,65 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  Home, 
-  Users, 
-  MessageSquare, 
-  Settings, 
-  Building2, 
+import {
+  Home,
+  Users,
+  MessageSquare,
+  Settings,
+  Building2,
   User,
   Menu,
-  X
+  X,
+  LogOut,
 } from 'lucide-react'
 
 const navigation = [
-  { 
-    id: 'dashboard', 
-    name: 'Tableau de bord', 
-    href: '/dashboard', 
-    icon: Home 
+  {
+    id: 'dashboard',
+    name: 'Tableau de bord',
+    href: '/dashboard',
+    icon: Home,
   },
-  { 
-    id: 'employees', 
-    name: 'Employés', 
-    href: '/employees', 
-    icon: Users 
+  {
+    id: 'employees',
+    name: 'Employés',
+    href: '/employees',
+    icon: Users,
   },
-  { 
-    id: 'chat', 
-    name: 'Messages', 
-    href: '/chat', 
-    icon: MessageSquare 
+  {
+    id: 'chat',
+    name: 'Messages',
+    href: '/chat',
+    icon: MessageSquare,
   },
-  { 
-    id: 'settings', 
-    name: 'Paramètres', 
-    href: '/settings', 
-    icon: Settings 
-  }
+  {
+    id: 'settings',
+    name: 'Paramètres',
+    href: '/settings',
+    icon: Settings,
+  },
 ]
 
 export default function Sidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const pathname = usePathname()
+  const { user, logout } = useAuthStore()
+  const router = useRouter()
 
   const isActiveRoute = (href) => {
     if (href === '/dashboard') {
       return pathname === '/' || pathname === '/dashboard'
     }
     return pathname.startsWith(href)
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      router.push('/login')
+    } catch (error) {
+      console.error('Erreur déconnexion:', error)
+    }
   }
 
   return (
@@ -70,18 +82,20 @@ export default function Sidebar() {
 
       {/* Mobile backdrop */}
       {isMobileOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`
+      <div
+        className={`
         sidebar-layout bg-gradient-to-b from-slate-900 to-slate-800 flex flex-col
         ${isMobileOpen ? 'mobile-open' : ''}
         z-50
-      `}>
+      `}
+      >
         {/* Header */}
         <div className="p-6 border-b border-slate-700 flex-shrink-0">
           <div className="flex items-center space-x-3">
@@ -94,7 +108,7 @@ export default function Sidebar() {
             </div>
           </div>
         </div>
-        
+
         {/* Navigation */}
         <nav className="flex-1 p-6 space-y-3 overflow-y-auto">
           {navigation.map((item) => {
@@ -107,13 +121,20 @@ export default function Sidebar() {
                 className={`
                   w-full flex items-center space-x-3 px-4 py-3 rounded-xl 
                   transition-all duration-200 group
-                  ${isActive 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105' 
-                    : 'text-slate-300 hover:bg-slate-700 hover:text-white hover:scale-105'
+                  ${
+                    isActive
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105'
+                      : 'text-slate-300 hover:bg-slate-700 hover:text-white hover:scale-105'
                   }
                 `}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-white'}`} />
+                <item.icon
+                  className={`w-5 h-5 ${
+                    isActive
+                      ? 'text-white'
+                      : 'text-slate-400 group-hover:text-white'
+                  }`}
+                />
                 <span className="font-medium">{item.name}</span>
               </Link>
             )
@@ -127,9 +148,22 @@ export default function Sidebar() {
               <User className="w-4 h-4 text-slate-300" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">Admin User</p>
-              <p className="text-xs text-slate-400">En ligne</p>
+              <p className="text-sm font-medium text-white truncate">
+                {user?.displayName || 'Utilisateur'}
+              </p>
+              <p className="text-xs text-slate-400">
+                {user?.role
+                  ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+                  : 'En ligne'}
+              </p>
             </div>
+            <button
+              onClick={handleLogout}
+              className="p-1 text-slate-400 hover:text-white transition-colors"
+              title="Se déconnecter"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
